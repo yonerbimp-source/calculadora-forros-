@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Forros para Camas</title>
+  <style>
+    :root {
+      --bg: #f7f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --accent: #2563eb;
+      --ok: #065f46;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+    h1, h2, h3 { margin: 0 0 12px; }
+    p { margin: 8px 0; }
+    .muted { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 16px;
+      background: #fff;
+    }
+    .btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+    }
+    button.secondary {
+      background: #111827;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .result {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fafafa;
+    }
+    .result .title {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .result .value {
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .good {
+      color: var(--ok);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .small { font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Calculadora de Forros para Camas</h1>
+      <p class="muted">Basada en tu referencia real: colchón <strong>60 × 80 × 10</strong>, usando <strong>5 yardas de tela</strong>, <strong>3 yardas de zíper</strong> y <strong>1 rollo de cinta para 3.5 forros</strong>.</p>
+    </div>
+
+    <div class="card">
+      <h2>1) Medidas de la cama</h2>
+      <div class="grid">
+        <div>
+          <label for="ancho">Ancho</label>
+          <input id="ancho" type="number" step="0.01" value="60" />
+        </div>
+        <div>
+          <label for="largo">Largo</label>
+          <input id="largo" type="number" step="0.01" value="80" />
+        </div>
+        <div>
+          <label for="alto">Altura</label>
+          <input id="alto" type="number" step="0.01" value="10" />
+        </div>
+        <div>
+          <label for="unidad">Unidad</label>
+          <select id="unidad">
+            <option value="in">Pulgadas</option>
+            <option value="cm">Centímetros</option>
+          </select>
+        </div>
+      </div>
+      <p class="small muted">Consejo: si normalmente mides como 60 × 80 × 10, déjalo en pulgadas.</p>
+    </div>
+
+    <div class="card">
+      <h2>2) Tela</h2>
+      <div class="grid">
+        <div>
+          <label for="anchoTela">Ancho de la tela (pulgadas)</label>
+          <select id="anchoTela">
+            <option value="110">110 (doble ancho)</option>
+            <option value="60">60 (impermeable)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3) Precio de materiales</h2>
+      <div class="grid">
+        <div>
+          <label for="precioTela">Precio de tela por yarda</label>
+          <input id="precioTela" type="number" step="0.01" value="0" />
+        </div>
+        <div>
+          <label for="precioZiper">Precio de zíper por yarda</label>
+          <input id="precioZiper" type="number" step="0.01" value="0" />
+        </div>
+        <div>
+          <label for="precioRollo">Precio de 1 rollo de cinta</label>
+          <input id="precioRollo" type="number" step="0.01" value="0" />
+        </div>
+        <div>
+          <label for="manoObra">Mano de obra por forro</label>
+          <input id="manoObra" type="number" step="0.01" value="0" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>4) Ganancia y cantidad</h2>
+      <div class="grid">
+        <div>
+          <label for="ganancia">Ganancia total por forro</label>
+          <input id="ganancia" type="number" step="0.01" value="700" />
+        </div>
+        <div>
+          <label for="cantidad">Cantidad de forros</label>
+          <input id="cantidad" type="number" step="1" value="1" />
+        </div>
+      </div>
+
+      <h3>Distribución de la ganancia (%)</h3>
+      <div class="grid">
+        <div>
+          <label for="pMaterial">Reinvertir en materiales</label>
+          <input id="pMaterial" type="number" value="25" />
+        </div>
+        <div>
+          <label for="pTransporte">Fondo transporte</label>
+          <input id="pTransporte" type="number" value="15" />
+        </div>
+        <div>
+          <label for="pPublicidad">Publicidad / mercadeo</label>
+          <input id="pPublicidad" type="number" value="10" />
+        </div>
+        <div>
+          <label for="pPersonal">Ganancia personal</label>
+          <input id="pPersonal" type="number" value="20" />
+        </div>
+        <div>
+          <label for="pAhorro">Ahorros</label>
+          <input id="pAhorro" type="number" value="15" />
+        </div>
+        <div>
+          <label for="pExpansion">Expandir negocio</label>
+          <input id="pExpansion" type="number" value="15" />
+        </div>
+      </div>
+
+      <h3>Publicidad mensual</h3>
+      <div class="grid">
+        <div>
+          <label for="usdDia">Publicidad en dólares por día</label>
+          <input id="usdDia" type="number" step="0.01" value="1" />
+        </div>
+        <div>
+          <label for="tasaDolar">Tasa del dólar</label>
+          <input id="tasaDolar" type="number" step="0.01" value="60" />
+        </div>
+        <div>
+          <label for="diasPublicidad">Días al mes</label>
+          <input id="diasPublicidad" type="number" step="1" value="30" />
+        </div>
+        <div>
+          <label for="ventasMes">Forros que esperas vender al mes</label>
+          <input id="ventasMes" type="number" step="1" value="15" />
+        </div>
+      </div>
+
+      <div class="btns">
+        <button onclick="calcular()">Calcular</button>
+        <button class="secondary" onclick="ponerQueen()">Poner medida base Queen</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Resultado por 1 forro</h2>
+      <div class="result-grid">
+        <div class="result">
+          <div class="title">Tela necesaria</div>
+          <div class="value" id="rTela">0 yd</div>
+        </div>
+        <div class="result">
+          <div class="title">Zíper necesario</div>
+          <div class="value" id="rZiper">0 yd</div>
+        </div>
+        <div class="result">
+          <div class="title">Cinta necesaria</div>
+          <div class="value" id="rCinta">0 rollos</div>
+        </div>
+        <div class="result">
+          <div class="title">Costo de materiales</div>
+          <div class="value" id="rCosto">0</div>
+        </div>
+        <div class="result">
+          <div class="title">Costo total + mano de obra</div>
+          <div class="value" id="rTotalCosto">0</div>
+        </div>
+        <div class="result">
+          <div class="title">Precio sugerido de venta (incluye ganancia)</div>
+          <div class="value good" id="rVenta">0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Resultado para la cantidad elegida</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Tela total</td><td id="tTela">0 yd</td></tr>
+          <tr><td>Zíper total</td><td id="tZiper">0 yd</td></tr>
+          <tr><td>Cinta total</td><td id="tCinta">0 rollos</td></tr>
+          <tr><td>Costo total de materiales</td><td id="tMateriales">0</td></tr>
+          <tr><td>Costo total con mano de obra</td><td id="tConMano">0</td></tr>
+          <tr><td>Total de venta sugerido</td><td id="tVenta">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Distribución de ganancia por forro</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Destino</th>
+            <th>Monto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Materiales futuros</td><td id="gMaterial">0</td></tr>
+          <tr><td>Fondo transporte</td><td id="gTransporte">0</td></tr>
+          <tr><td>Publicidad / mercadeo</td><td id="gPublicidad">0</td></tr>
+          <tr><td>Ganancia personal</td><td id="gPersonal">0</td></tr>
+          <tr><td>Ahorros</td><td id="gAhorro">0</td></tr>
+          <tr><td>Expandir negocio</td><td id="gExpansion">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Publicidad mensual</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th>Monto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Gasto mensual en publicidad</td><td id="pubMensual">0</td></tr>
+          <tr><td>Publicidad por forro vendido</td><td id="pubPorForro">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Proyección libre</h2>
+      <div class="grid">
+        <div>
+          <label for="proyeccionCantidad">Forros vendidos para proyectar</label>
+          <input id="proyeccionCantidad" type="number" step="1" value="15" />
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Ganancia total proyectada</td><td id="projGanancia">0</td></tr>
+          <tr><td>Materiales futuros</td><td id="projMaterial">0</td></tr>
+          <tr><td>Fondo transporte</td><td id="projTransporte">0</td></tr>
+          <tr><td>Publicidad / mercadeo</td><td id="projPublicidad">0</td></tr>
+          <tr><td>Ganancia personal</td><td id="projPersonal">0</td></tr>
+          <tr><td>Ahorros</td><td id="projAhorro">0</td></tr>
+          <tr><td>Expandir negocio</td><td id="projExpansion">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Cómo calcula esta versión</h3>
+      <p class="muted">Tela: se calcula por el área total del colchón (arriba, abajo y lados) comparando con tu medida base y sumando 2 pulgadas extra al ancho y al largo para costura. Zíper: se estima comparando el ancho + largo con la medida base. Cinta: se estima comparando el perímetro de arriba y abajo con la medida base. También calcula publicidad mensual según los dólares por día, la tasa del dólar y los días anunciando, y te permite hacer una proyección libre con la cantidad de forros que tú quieras. Esta calculadora es práctica para cotizar y administrar mejor el negocio.</p>
+    </div>
+  </div>
+
+  <script>
+    const BASE = {
+      ancho: 60,
+      largo: 80,
+      alto: 10,
+      telaYardas: 5,
+      ziperYardas: 3,
+      rollosPorForro: 1 / 3.5
+    };
+
+    function redondearArriba(valor, paso = 0.25) {
+      return Math.ceil(valor / paso) * paso;
+    }
+
+    function fmt(n) {
+      return new Intl.NumberFormat('es-DO', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(n);
+    }
+
+    function convertirAPulgadas(valor, unidad) {
+      return unidad === 'cm' ? valor / 2.54 : valor;
+    }
+
+    function areaCaja(a, l, h) {
+      return 2 * ((a * l) + (a * h) + (l * h));
+    }
+
+    function ponerQueen() {
+      document.getElementById('ancho').value = 60;
+      document.getElementById('largo').value = 80;
+      document.getElementById('alto').value = 10;
+      document.getElementById('unidad').value = 'in';
+      calcular();
+    }
+
+    function calcular() {
+      const unidad = document.getElementById('unidad').value;
+      let ancho = parseFloat(document.getElementById('ancho').value) || 0;
+      let largo = parseFloat(document.getElementById('largo').value) || 0;
+      let alto = parseFloat(document.getElementById('alto').value) || 0;
+      const precioTela = parseFloat(document.getElementById('precioTela').value) || 0;
+      const anchoTela = parseFloat(document.getElementById('anchoTela').value) || 110;
+      const precioZiper = parseFloat(document.getElementById('precioZiper').value) || 0;
+      const precioRollo = parseFloat(document.getElementById('precioRollo').value) || 0;
+      const manoObra = parseFloat(document.getElementById('manoObra').value) || 0;
+      const ganancia = parseFloat(document.getElementById('ganancia').value) || 0;
+      const cantidad = Math.max(1, parseInt(document.getElementById('cantidad').value) || 1);
+
+      ancho = convertirAPulgadas(ancho, unidad);
+      largo = convertirAPulgadas(largo, unidad);
+      alto = convertirAPulgadas(alto, unidad);
+
+      const areaBase = areaCaja(BASE.ancho, BASE.largo, BASE.alto);
+      // agregar 2 pulgadas extra a ancho y largo para costura (ej: 60 → 62)
+      const anchoConMargen = ancho + 2;
+      const largoConMargen = largo + 2;
+
+      const areaActual = areaCaja(anchoConMargen, largoConMargen, alto);
+      const factorTela = areaActual / areaBase;
+
+      let tela = BASE.telaYardas * factorTela;
+
+      // ajustar si la tela es más estrecha que la base (110 pulgadas)
+      const factorAnchoTela = 110 / anchoTela;
+      tela = redondearArriba(tela * factorAnchoTela, 0.25);
+
+      const factorZiper = (anchoConMargen + largoConMargen) / (BASE.ancho + BASE.largo);
+      const ziper = redondearArriba(BASE.ziperYardas * factorZiper, 0.25);
+
+      const perimetroBase = 2 * (BASE.ancho + BASE.largo);
+      const perimetroActual = 2 * (anchoConMargen + largoConMargen);
+      const factorCinta = perimetroActual / perimetroBase;
+      const cintaRollos = BASE.rollosPorForro * factorCinta;
+
+      const costoTela = tela * precioTela;
+      const costoZiper = ziper * precioZiper;
+      const costoCinta = cintaRollos * precioRollo;
+      const costoMateriales = costoTela + costoZiper + costoCinta;
+      const costoTotal = costoMateriales + manoObra;
+      const precioVenta = costoTotal + ganancia;
+
+      const pMaterial = (parseFloat(document.getElementById('pMaterial').value) || 0) / 100;
+      const pTransporte = (parseFloat(document.getElementById('pTransporte').value) || 0) / 100;
+      const pPublicidad = (parseFloat(document.getElementById('pPublicidad').value) || 0) / 100;
+      const pPersonal = (parseFloat(document.getElementById('pPersonal').value) || 0) / 100;
+      const pAhorro = (parseFloat(document.getElementById('pAhorro').value) || 0) / 100;
+      const pExpansion = (parseFloat(document.getElementById('pExpansion').value) || 0) / 100;
+
+      const gMaterial = ganancia * pMaterial;
+      const gTransporte = ganancia * pTransporte;
+      const gPublicidad = ganancia * pPublicidad;
+      const gPersonal = ganancia * pPersonal;
+      const gAhorro = ganancia * pAhorro;
+      const gExpansion = ganancia * pExpansion;
+
+      document.getElementById('rTela').textContent = `${fmt(tela)} yd`;
+      document.getElementById('rZiper').textContent = `${fmt(ziper)} yd`;
+      document.getElementById('rCinta').textContent = `${fmt(cintaRollos)} rollos`;
+      document.getElementById('rCosto').textContent = `$${fmt(costoMateriales)}`;
+      document.getElementById('rTotalCosto').textContent = `$${fmt(costoTotal)}`;
+      document.getElementById('rVenta').textContent = `$${fmt(precioVenta)}`;
+
+      document.getElementById('tTela').textContent = `${fmt(tela * cantidad)} yd`;
+      document.getElementById('tZiper').textContent = `${fmt(ziper * cantidad)} yd`;
+      document.getElementById('tCinta').textContent = `${fmt(cintaRollos * cantidad)} rollos`;
+      document.getElementById('tMateriales').textContent = `$${fmt(costoMateriales * cantidad)}`;
+      document.getElementById('tConMano').textContent = `$${fmt(costoTotal * cantidad)}`;
+      document.getElementById('gMaterial').textContent = `$${fmt(gMaterial)}`;
+      document.getElementById('gTransporte').textContent = `$${fmt(gTransporte)}`;
+      document.getElementById('gPublicidad').textContent = `$${fmt(gPublicidad)}`;
+      document.getElementById('gPersonal').textContent = `$${fmt(gPersonal)}`;
+      document.getElementById('gAhorro').textContent = `$${fmt(gAhorro)}`;
+      document.getElementById('gExpansion').textContent = `$${fmt(gExpansion)}`;
+
+      const usdDia = parseFloat(document.getElementById('usdDia').value) || 0;
+      const tasaDolar = parseFloat(document.getElementById('tasaDolar').value) || 0;
+      const diasPublicidad = Math.max(1, parseInt(document.getElementById('diasPublicidad').value) || 1);
+      const ventasMes = Math.max(1, parseInt(document.getElementById('ventasMes').value) || 1);
+      const proyeccionCantidad = Math.max(1, parseInt(document.getElementById('proyeccionCantidad').value) || 1);
+
+      const gastoPublicidadMensual = usdDia * tasaDolar * diasPublicidad;
+      const publicidadPorForro = gastoPublicidadMensual / ventasMes;
+
+      document.getElementById('pubMensual').textContent = `$${fmt(gastoPublicidadMensual)}`;
+      document.getElementById('pubPorForro').textContent = `$${fmt(publicidadPorForro)}`;
+
+      document.getElementById('projGanancia').textContent = `$${fmt(ganancia * proyeccionCantidad)}`;
+      document.getElementById('projMaterial').textContent = `$${fmt(gMaterial * proyeccionCantidad)}`;
+      document.getElementById('projTransporte').textContent = `$${fmt(gTransporte * proyeccionCantidad)}`;
+      document.getElementById('projPublicidad').textContent = `$${fmt(gPublicidad * proyeccionCantidad)}`;
+      document.getElementById('projPersonal').textContent = `$${fmt(gPersonal * proyeccionCantidad)}`;
+      document.getElementById('projAhorro').textContent = `$${fmt(gAhorro * proyeccionCantidad)}`;
+      document.getElementById('projExpansion').textContent = `$${fmt(gExpansion * proyeccionCantidad)}`;
+
+      document.getElementById('tVenta').textContent = `$${fmt(precioVenta * cantidad)}`;
+    }
+
+    calcular();
+  </script>
+</body>
+</html>
