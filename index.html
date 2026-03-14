@@ -116,7 +116,7 @@
   <div class="wrap">
     <div class="card">
       <h1>Calculadora de Forros para Camas</h1>
-      <p class="muted">Basada en tu referencia real: colchón <strong>60 × 80 × 10</strong>, usando <strong>5 yardas de tela</strong>, <strong>3 yardas de zíper</strong> y <strong>1 rollo de cinta para 3.5 forros</strong>.</p>
+      <p class="muted">Basada en tu referencia real: colchón <strong>60 × 80 × 10</strong>, usando <strong>4.75 yardas de tela</strong>, <strong>3 yardas de zíper</strong> y <strong>1 rollo de cinta para 3.5 forros</strong>.</p>
     </div>
 
     <div class="card">
@@ -371,7 +371,7 @@
       ancho: 60,
       largo: 80,
       alto: 10,
-      telaYardas: 5,
+      telaYardas: 4.75,
       ziperYardas: 3,
       rollosPorForro: 1 / 3.5
     };
@@ -418,7 +418,6 @@
       alto = convertirAPulgadas(alto, unidad);
 
       const areaBase = areaCaja(BASE.ancho, BASE.largo, BASE.alto);
-      // agregar 2 pulgadas extra a ancho y largo para costura (ej: 60 → 62)
       const anchoConMargen = ancho + 2;
       const largoConMargen = largo + 2;
 
@@ -427,7 +426,6 @@
 
       let tela = BASE.telaYardas * factorTela;
 
-      // ajustar si la tela es más estrecha que la base (110 pulgadas)
       const factorAnchoTela = 110 / anchoTela;
       tela = redondearArriba(tela * factorAnchoTela, 0.25);
 
